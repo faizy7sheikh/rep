@@ -1,0 +1,42 @@
+version: '3.2'
+
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-app
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    networks:
+      - larav
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:8.0
+    container_name: laravel-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+
+    networks:
+      - larav
+    ports:
+      - "3606:3606"
+    volumes:
+      - dbdata:/var/lib/mysql
+    
+    
+  
+networks:
+  larav:
+    driver: bridge
+
+    
